@@ -1,0 +1,23 @@
+from ipaddress import IPv4Address, summarize_address_range
+
+def convert_range_to_cidr(start_ip, end_ip):
+    start_ip = IPv4Address(start_ip)
+    end_ip = IPv4Address(end_ip)
+    return [str(cidr) for cidr in summarize_address_range(start_ip, end_ip)]
+
+# Mở file input để đọc, mỗi dòng chứa một dãy IP
+with open('input.txt', 'r') as file:
+    input_lines = file.readlines()
+
+# Mở file output để ghi
+with open('output.txt', 'w') as file:
+    for line in input_lines:
+        start_ip, end_ip = line.strip().split('-')
+        # Chuyển đổi dải địa chỉ IP thành các khối CIDR
+        cidrs = convert_range_to_cidr(start_ip, end_ip)
+        # Ghi kết quả vào file, mỗi CIDR trên một dòng mới
+        for cidr in cidrs:
+            file.write(cidr + '\n')
+        file.write('\n')  # Thêm dòng trống giữa các nhóm CIDR cho dễ đọc
+
+print("Chuyển đổi hoàn tất. Kết quả được ghi vào 'output.txt'.")
