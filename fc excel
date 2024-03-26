@@ -19,3 +19,36 @@ Function RemoveVietnameseSigns(str As String) As String
     
     RemoveVietnameseSigns = str
 End Function
+Function RemoveVietnameseSigns(str As String) As String
+    Dim arrSigns As Variant
+    Dim i As Long
+    
+    arrSigns = Array("aàảãáạăằẳẵắặâầẩẫấậ", "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ", _
+                     "eèẻẽéẹêềểễếệ", "EÈẺẼÉẸÊỀỂỄẾỆ", _
+                     "iìỉĩíị", "IÌỈĨÍỊ", _
+                     "oòỏõóọôồổỗốộơờởỡớợ", "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ", _
+                     "uùủũúụưừửữứự", "UÙỦŨÚỤƯỪỬỮỨỰ", _
+                     "yỳỷỹýỵ", "YỲỶỸÝỴ", _
+                     "dđ", "DĐ")
+                     
+    For i = 0 To UBound(arrSigns) Step 2
+        Dim j As Long
+        For j = 1 To Len(arrSigns(i))
+            str = Replace(str, Mid(arrSigns(i), j, 1), Mid(arrSigns(i + 1), Int((j + 1) / 2), 1))
+        Next
+    Next
+    
+    RemoveVietnameseSigns = str
+End Function
+
+Sub ConvertColumnAToNonAccent()
+    Dim ws As Worksheet
+    Set ws = ActiveSheet
+    Dim lastRow As Long
+    lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+    
+    Dim i As Long
+    For i = 1 To lastRow
+        ws.Cells(i, "A").Value = RemoveVietnameseSigns(ws.Cells(i, "A").Value)
+    Next i
+End Sub
